@@ -21,5 +21,7 @@ public interface Future<V> extends java.util.concurrent.Future<V> {
 
     Future<V> await() throws InterruptedException;
 
+    Future<V> sync() throws InterruptedException;
+
     V getNow();
 }
