@@ -5,6 +5,4 @@ package com.bronson.cetty.core.handler;
  */
 public interface Handler {
 
-
-
 }
