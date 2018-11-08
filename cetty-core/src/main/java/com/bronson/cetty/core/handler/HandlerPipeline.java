@@ -1,6 +1,8 @@
 package com.bronson.cetty.core.handler;
 
 import com.bronson.cetty.core.Page;
+import com.bronson.cetty.core.Payload;
+import com.bronson.cetty.core.Result;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,11 +42,9 @@ public class HandlerPipeline {
             if (ctx == null) {
                 return null;
             }
-
             if (ctx.handler() == handler) {
                 return ctx;
             }
-
             ctx = ctx.next;
         }
     }
@@ -80,16 +80,11 @@ public class HandlerPipeline {
     }
 
     public HandlerPipeline addLast(Handler handler) {
-
         DefaultHandlerContext newCtx = null;
         if (handler instanceof ReduceHandler) {
-
             newCtx = new DefaultHandlerContext(this, "ProcessHandler#" + processCounter.getAndAdd(1), handler);
-
         } else if (handler instanceof ProcessHandler) {
-
             newCtx = new DefaultHandlerContext(this, "ReduceHandler#" + reduceCounter.getAndAdd(1), handler);
-
         } else {
             throw new IllegalArgumentException("handler must be ProcessHandler or ReduceHandler");
         }
@@ -106,24 +101,33 @@ public class HandlerPipeline {
     }
 
 
-    public void receive() {
+    public void start() {
+        head.fireReceive();
+    }
 
+    public void download(Payload payload) {
+        head.fireDownload(payload);
     }
 
 
-    final class HeadContext extends AbstractHandlerContext implements ProcessHandler {
+    final class HeadContext extends AbstractHandlerContext implements ProcessHandler,ReduceHandler {
 
         public HeadContext(HandlerPipeline pipeline) {
             super(false, true, pipeline, "head");
         }
 
         @Override
-        public void receive(AbstractHandlerContext ctx) {
+        public void receive(HandlerContext ctx) {
 
         }
 
         @Override
-        public void process(AbstractHandlerContext ctx) {
+        public void download(HandlerContext ctx,Payload payload) {
+
+        }
+
+        @Override
+        public void process(HandlerContext ctx, Result result) {
 
         }
 
@@ -131,16 +135,31 @@ public class HandlerPipeline {
         public Handler handler() {
             return this;
         }
+
+        @Override
+        public void reduce(HandlerContext ctx, Result result) {
+            ctx.fireReduce(result);
+        }
     }
 
-    final class TailContext extends AbstractHandlerContext implements ReduceHandler {
+    final class TailContext extends AbstractHandlerContext implements ProcessHandler {
 
         public TailContext(HandlerPipeline pipeline) {
             super(true, false, pipeline, "tail");
         }
 
         @Override
-        public void reduce(AbstractHandlerContext ctx) {
+        public void receive(HandlerContext ctx) {
+
+        }
+
+        @Override
+        public void download(HandlerContext ctx, Payload payload) {
+
+        }
+
+        @Override
+        public void process(HandlerContext ctx, Result result) {
 
         }
 

@@ -1,5 +1,6 @@
 package com.bronson.cetty.core.net;
 
+import com.bronson.cetty.core.Payload;
 import com.bronson.cetty.core.constans.HttpConstants;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;

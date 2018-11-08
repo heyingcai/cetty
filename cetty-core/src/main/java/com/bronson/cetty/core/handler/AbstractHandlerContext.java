@@ -1,6 +1,8 @@
 package com.bronson.cetty.core.handler;
 
 import com.bronson.cetty.core.Page;
+import com.bronson.cetty.core.Result;
+import com.bronson.cetty.core.Payload;
 
 /**
  * @author heyingcai
@@ -22,10 +24,12 @@ public abstract class AbstractHandlerContext implements HandlerContext {
         this.name = name;
     }
 
+    @Override
     public HandlerPipeline pipeline() {
         return pipeline;
     }
 
+    @Override
     public Page page() {
         return pipeline.page();
     }
@@ -45,35 +49,47 @@ public abstract class AbstractHandlerContext implements HandlerContext {
     private AbstractHandlerContext findContextReduce() {
         AbstractHandlerContext ctx = this;
         do {
-            ctx = ctx.prev;
+            ctx = ctx.next;
         } while (!ctx.reduceEvent);
         return ctx;
     }
 
-    public void fireReduce() {
-        final AbstractHandlerContext next = findContextReduce();
-        next.invokeReduce();
-    }
-
-
-    private void invokeReduce() {
-        ReduceHandler reduceHandler = (ReduceHandler) handler();
-        reduceHandler.reduce(this);
-    }
-
-
-    public void fireProcess() {
+    @Override
+    public void fireDownload(Payload payload) {
         final AbstractHandlerContext next = findContextProcess();
-        next.invokeProcess();
-
+        next.invokeDownload(payload);
     }
 
-    private void invokeProcess() {
+    private void invokeDownload(Payload payload) {
         ProcessHandler processHandler = (ProcessHandler) handler();
-        processHandler.process(this);
+        processHandler.download(this, payload);
     }
 
-    public void receive() {
+    @Override
+    public void fireReduce(Result result) {
+        final AbstractHandlerContext next = findContextReduce();
+        next.invokeReduce(result);
+    }
+
+    private void invokeReduce(Result result) {
+        ReduceHandler reduceHandler = (ReduceHandler) handler();
+        reduceHandler.reduce(this, result);
+    }
+
+    @Override
+    public void fireProcess(Result result) {
+        final AbstractHandlerContext next = findContextProcess();
+        next.invokeProcess(result);
+
+    }
+
+    private void invokeProcess(Result result) {
+        ProcessHandler processHandler = (ProcessHandler) handler();
+        processHandler.process(this, result);
+    }
+
+    @Override
+    public void fireReceive() {
         AbstractHandlerContext head = findContextProcess();
         head.invokeReceive();
 
@@ -82,6 +98,5 @@ public abstract class AbstractHandlerContext implements HandlerContext {
     private void invokeReceive() {
         ProcessHandler processHandler = (ProcessHandler) handler();
         processHandler.receive(this);
-
     }
 }

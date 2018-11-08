@@ -1,7 +1,7 @@
 package test.net;
 
 import com.bronson.cetty.core.net.HttpClientGenerator;
-import com.bronson.cetty.core.net.Payload;
+import com.bronson.cetty.core.Payload;
 import com.bronson.cetty.core.net.SyncHttpClientGenerator;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;

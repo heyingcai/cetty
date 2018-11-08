@@ -1,5 +1,7 @@
 package com.bronson.cetty.core.net;
 
+import com.bronson.cetty.core.Payload;
+
 /**
  * @author heyingcai
  */

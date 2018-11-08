@@ -1,6 +1,6 @@
 package com.bronson.cetty.core;
 
-import com.bronson.cetty.core.net.Payload;
+import com.bronson.cetty.core.handler.HandlerPipeline;
 
 /**
  * @author heyingcai
@@ -9,13 +9,14 @@ public class Page {
 
     private Payload payload;
 
-    private String name;
+    private HandlerPipeline pipeline;
 
-    public String getName() {
-        return name;
+    public Page() {
+        this.pipeline = new HandlerPipeline(this);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public HandlerPipeline pipeline() {
+        return pipeline;
     }
+
 }

@@ -1,5 +1,8 @@
 package com.bronson.cetty.core.handler;
 
+import com.bronson.cetty.core.Result;
+import com.bronson.cetty.core.Payload;
+
 /**
  * process handler
  *
@@ -12,12 +15,21 @@ public interface ProcessHandler extends Handler {
      *
      * @param ctx
      */
-    void receive(AbstractHandlerContext ctx);
+    void receive(HandlerContext ctx);
+
+    /**
+     * download the request
+     *
+     * @param ctx
+     * @param payload
+     */
+    void download(HandlerContext ctx, Payload payload);
 
     /**
      * process the request
      *
      * @param ctx
+     * @param result
      */
-    void process(AbstractHandlerContext ctx);
+    void process(HandlerContext ctx, Result result);
 }

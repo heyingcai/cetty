@@ -2,7 +2,7 @@ package test.net;
 
 import com.bronson.cetty.core.net.AsyncHttpClientGenerator;
 import com.bronson.cetty.core.net.HttpClientGenerator;
-import com.bronson.cetty.core.net.Payload;
+import com.bronson.cetty.core.Payload;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;

@@ -1,15 +1,18 @@
 package com.bronson.cetty.core.handler;
 
+import com.bronson.cetty.core.Result;
+
 /**
  * @author heyingcai
  */
 public interface ReduceHandler extends Handler {
 
     /**
-     * reduce the request from process handler
+     * reduce the request result from process handler
      *
      * @param ctx
+     * @param result
      */
-    void reduce(AbstractHandlerContext ctx);
+    void reduce(HandlerContext ctx, Result result);
 
 }

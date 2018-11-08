@@ -1,5 +1,6 @@
-package com.bronson.cetty.core.net;
+package com.bronson.cetty.core;
 
+import com.bronson.cetty.core.net.Proxy;
 import com.google.common.collect.Maps;
 
 import java.util.HashMap;
