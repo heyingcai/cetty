@@ -1,24 +1,18 @@
 package com.bronson.cetty.core.handler;
 
-import com.bronson.cetty.core.Payload;
+import com.bronson.cetty.core.Page;
 import com.bronson.cetty.core.Result;
 
 /**
  * @author heyingcai
  */
-public class PageProcessHandler extends ProcessHandlerAdapter{
+public class PageProcessHandler extends ProcessHandlerAdapter {
 
     @Override
-    public void process(HandlerContext ctx, Result result) {
-        String name = result.getName();
-        result.setName("page:" + name);
+    public void process(HandlerContext ctx, Page page) {
+        Result result = page.getResult();
+
         ctx.fireReduce(result);
     }
-
-    @Override
-    public Payload getPayload() {
-        return null;
-    }
-
 
 }

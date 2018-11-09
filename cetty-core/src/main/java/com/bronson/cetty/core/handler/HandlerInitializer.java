@@ -1,8 +1,8 @@
 package com.bronson.cetty.core.handler;
 
 import com.bronson.cetty.core.Cetty;
-import com.bronson.cetty.core.Payload;
-import com.bronson.cetty.core.Result;
+import com.bronson.cetty.core.Page;
+import com.bronson.cetty.core.Seed;
 
 /**
  * page handler initial
@@ -18,12 +18,12 @@ public abstract class HandlerInitializer implements ProcessHandler {
     }
 
     @Override
-    public void download(HandlerContext ctx, Payload payload) {
+    public void download(HandlerContext ctx, Seed seed) {
 
     }
 
     @Override
-    public void process(HandlerContext ctx, Result result) {
+    public void process(HandlerContext ctx, Page page) {
 
     }
 

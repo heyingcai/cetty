@@ -1,8 +1,10 @@
 package com.bronson.cetty.core.handler;
 
 import com.bronson.cetty.core.Cetty;
+import com.bronson.cetty.core.Page;
 import com.bronson.cetty.core.Payload;
 import com.bronson.cetty.core.Result;
+import com.bronson.cetty.core.Seed;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -105,8 +107,8 @@ public class HandlerPipeline {
         head.fireReceive();
     }
 
-    public void download(Payload payload) {
-        head.fireDownload(payload);
+    public void download(Seed seed) {
+        head.fireDownload(seed);
     }
 
 
@@ -122,12 +124,12 @@ public class HandlerPipeline {
         }
 
         @Override
-        public void download(HandlerContext ctx,Payload payload) {
+        public void download(HandlerContext ctx,Seed seed) {
 
         }
 
         @Override
-        public void process(HandlerContext ctx, Result result) {
+        public void process(HandlerContext ctx, Page page) {
 
         }
 
@@ -154,12 +156,12 @@ public class HandlerPipeline {
         }
 
         @Override
-        public void download(HandlerContext ctx, Payload payload) {
+        public void download(HandlerContext ctx, Seed seed) {
 
         }
 
         @Override
-        public void process(HandlerContext ctx, Result result) {
+        public void process(HandlerContext ctx, Page page) {
 
         }
 

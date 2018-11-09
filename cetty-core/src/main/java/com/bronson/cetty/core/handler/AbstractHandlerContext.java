@@ -3,7 +3,7 @@ package com.bronson.cetty.core.handler;
 import com.bronson.cetty.core.Cetty;
 import com.bronson.cetty.core.Page;
 import com.bronson.cetty.core.Result;
-import com.bronson.cetty.core.Payload;
+import com.bronson.cetty.core.Seed;
 
 /**
  * @author heyingcai
@@ -56,14 +56,14 @@ public abstract class AbstractHandlerContext implements HandlerContext {
     }
 
     @Override
-    public void fireDownload(Payload payload) {
+    public void fireDownload(Seed seed) {
         final AbstractHandlerContext next = findContextProcess();
-        next.invokeDownload(payload);
+        next.invokeDownload(seed);
     }
 
-    private void invokeDownload(Payload payload) {
+    private void invokeDownload(Seed seed) {
         ProcessHandler processHandler = (ProcessHandler) handler();
-        processHandler.download(this, payload);
+        processHandler.download(this, seed);
     }
 
     @Override
@@ -78,15 +78,15 @@ public abstract class AbstractHandlerContext implements HandlerContext {
     }
 
     @Override
-    public void fireProcess(Result result) {
+    public void fireProcess(Page page) {
         final AbstractHandlerContext next = findContextProcess();
-        next.invokeProcess(result);
+        next.invokeProcess(page);
 
     }
 
-    private void invokeProcess(Result result) {
+    private void invokeProcess(Page page) {
         ProcessHandler processHandler = (ProcessHandler) handler();
-        processHandler.process(this, result);
+        processHandler.process(this, page);
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.concurrent.Future;
 
 /**
  * @author heyingcai
@@ -27,7 +28,7 @@ public class AsyncHttpClientTest {
         HttpRequestBase httpGet = new HttpGet("http://www.baidu.com");
 
 
-        client.execute(httpGet,new Back());
+        Future<HttpResponse> execute = client.execute(httpGet, new Back());
     }
 
     static class Back implements FutureCallback<HttpResponse> {

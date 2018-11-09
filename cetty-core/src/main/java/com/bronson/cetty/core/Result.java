@@ -1,24 +1,56 @@
 package com.bronson.cetty.core;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author heyingcai
  */
 public class Result {
 
-    private String name;
+    private Seed seed;
 
-    public String getName() {
-        return name;
+    private List<Object> resultList = Lists.newLinkedList();
+
+    private Map<String, Object> fieldResult = Maps.newHashMap();
+
+    public void addResult(String result) {
+        resultList.add(result);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void addResult(Object result) {
+        resultList.add(result);
     }
 
-    @Override
-    public String toString() {
-        return "Result{" +
-                "name='" + name + '\'' +
-                '}';
+    public void addResults(Collection<?> results) {
+        resultList.addAll(results);
+    }
+
+    public void putField(String key, Object value) {
+        fieldResult.put(key, value);
+    }
+
+    public void putFieldMap(Map<String, Object> resultMap) {
+        fieldResult.putAll(resultMap);
+    }
+
+    public List<Object> getResultList() {
+        return resultList;
+    }
+
+    public Map<String, Object> getFieldResult() {
+        return fieldResult;
+    }
+
+    public void setSeed(Seed seed) {
+        this.seed = seed;
+    }
+
+    public Seed getSeed() {
+        return seed;
     }
 }

@@ -1,14 +1,32 @@
 package com.bronson.cetty.core;
 
-import com.bronson.cetty.core.handler.HandlerPipeline;
-
 /**
  * @author heyingcai
  */
 public class Page {
 
-    private Payload payload;
+    private Seed seed;
 
-    private HandlerPipeline pipeline;
+    private Result result;
 
+    private String rawData;
+
+    private byte[] bytes;
+
+    public Seed getSeed() {
+        return seed;
+    }
+
+    public void setSeed(Seed seed) {
+        this.seed = seed;
+    }
+
+    public Result getResult() {
+        result.setSeed(seed);
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
 }

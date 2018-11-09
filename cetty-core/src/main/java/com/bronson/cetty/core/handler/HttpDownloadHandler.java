@@ -1,7 +1,9 @@
 package com.bronson.cetty.core.handler;
 
+import com.bronson.cetty.core.Page;
 import com.bronson.cetty.core.Payload;
 import com.bronson.cetty.core.Result;
+import com.bronson.cetty.core.Seed;
 import com.bronson.cetty.core.net.AsyncHttpClientGenerator;
 import com.bronson.cetty.core.net.HttpClientGenerator;
 import com.bronson.cetty.core.net.SyncHttpClientGenerator;
@@ -25,14 +27,11 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
     HttpClientGenerator<CloseableHttpClient> httpClientHttpClientGenerator = new SyncHttpClientGenerator();
 
     @Override
-    public void download(HandlerContext ctx, Payload payload) {
+    public void download(HandlerContext ctx, Seed seed) {
         Result result = new Result();
-        result.setName("1234");
-        ctx.fireProcess(result);
+        Page page = new Page();
+        page.setResult(result);
+        ctx.fireProcess(page);
     }
 
-    @Override
-    public Payload getPayload() {
-        return null;
-    }
 }
