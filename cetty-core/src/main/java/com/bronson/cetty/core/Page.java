@@ -11,12 +11,4 @@ public class Page {
 
     private HandlerPipeline pipeline;
 
-    public Page() {
-        this.pipeline = new HandlerPipeline(this);
-    }
-
-    public HandlerPipeline pipeline() {
-        return pipeline;
-    }
-
 }

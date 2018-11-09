@@ -1,5 +1,6 @@
 package com.bronson.cetty.core.handler;
 
+import com.bronson.cetty.core.Cetty;
 import com.bronson.cetty.core.Page;
 import com.bronson.cetty.core.Result;
 import com.bronson.cetty.core.Payload;
@@ -14,7 +15,7 @@ public interface HandlerContext {
      *
      * @return
      */
-    Page page();
+    Cetty cetty();
 
     /**
      * return pipeline

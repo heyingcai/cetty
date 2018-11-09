@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * @author heyingcai
  */
-public class DownloadHandler extends ProcessHandlerAdapter {
+public class HttpDownloadHandler extends ProcessHandlerAdapter {
 
     private final Map<String, CloseableHttpClient> httpClients = Maps.newHashMap();
 
@@ -27,6 +27,7 @@ public class DownloadHandler extends ProcessHandlerAdapter {
     @Override
     public void download(HandlerContext ctx, Payload payload) {
         Result result = new Result();
+        result.setName("1234");
         ctx.fireProcess(result);
     }
 

@@ -1,6 +1,6 @@
 package com.bronson.cetty.core.handler;
 
-import com.bronson.cetty.core.Page;
+import com.bronson.cetty.core.Cetty;
 import com.bronson.cetty.core.Payload;
 import com.bronson.cetty.core.Result;
 
@@ -12,15 +12,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class HandlerPipeline {
 
-    private Page page;
+    private Cetty cetty;
     final AbstractHandlerContext head;
     final AbstractHandlerContext tail;
 
     final AtomicInteger processCounter = new AtomicInteger(0);
     final AtomicInteger reduceCounter = new AtomicInteger(0);
 
-    public HandlerPipeline(Page page) {
-        this.page = page;
+    public HandlerPipeline(Cetty cetty) {
+        this.cetty = cetty;
         head = new HeadContext(this);
         tail = new TailContext(this);
 
@@ -28,8 +28,8 @@ public class HandlerPipeline {
         tail.prev = head;
     }
 
-    public Page page() {
-        return page;
+    public Cetty cetty() {
+        return cetty;
     }
 
     public final AbstractHandlerContext context(Handler handler) {

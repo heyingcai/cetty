@@ -1,5 +1,6 @@
 package com.bronson.cetty.core.handler;
 
+import com.bronson.cetty.core.Cetty;
 import com.bronson.cetty.core.Page;
 import com.bronson.cetty.core.Result;
 import com.bronson.cetty.core.Payload;
@@ -30,8 +31,8 @@ public abstract class AbstractHandlerContext implements HandlerContext {
     }
 
     @Override
-    public Page page() {
-        return pipeline.page();
+    public Cetty cetty() {
+        return pipeline.cetty();
     }
 
     public String name() {

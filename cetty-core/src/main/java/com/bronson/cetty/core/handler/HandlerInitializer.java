@@ -1,6 +1,6 @@
 package com.bronson.cetty.core.handler;
 
-import com.bronson.cetty.core.Page;
+import com.bronson.cetty.core.Cetty;
 import com.bronson.cetty.core.Payload;
 import com.bronson.cetty.core.Result;
 
@@ -30,14 +30,14 @@ public abstract class HandlerInitializer implements ProcessHandler {
     /**
      * init page
      *
-     * @param page
+     * @param cetty
      */
-    public abstract void initPage(Page page);
+    public abstract void initCetty(Cetty cetty);
 
     private void initPages(HandlerContext ctx) {
         try {
-            Page channel = ctx.page();
-            initPage(channel);
+            Cetty cetty = ctx.cetty();
+            initCetty(cetty);
         } finally {
             remove(ctx);
         }
