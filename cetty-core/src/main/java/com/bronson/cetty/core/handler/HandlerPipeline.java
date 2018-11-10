@@ -2,9 +2,9 @@ package com.bronson.cetty.core.handler;
 
 import com.bronson.cetty.core.Cetty;
 import com.bronson.cetty.core.Page;
-import com.bronson.cetty.core.Payload;
 import com.bronson.cetty.core.Result;
 import com.bronson.cetty.core.Seed;
+import com.bronson.cetty.core.scheduler.Scheduler;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -32,6 +32,17 @@ public class HandlerPipeline {
 
     public Cetty cetty() {
         return cetty;
+    }
+
+    public boolean checkDownloadHandler() {
+        AbstractHandlerContext context = head.next;
+        while (context != null) {
+            if (context.isProcessEvent() && context.name().equals("downloader")) {
+                return false;
+            }
+            context = context.next;
+        }
+        return false;
     }
 
     public final AbstractHandlerContext context(Handler handler) {
@@ -84,9 +95,9 @@ public class HandlerPipeline {
     public HandlerPipeline addLast(Handler handler) {
         DefaultHandlerContext newCtx = null;
         if (handler instanceof ReduceHandler) {
-            newCtx = new DefaultHandlerContext(this, "ProcessHandler#" + processCounter.getAndAdd(1), handler);
-        } else if (handler instanceof ProcessHandler) {
             newCtx = new DefaultHandlerContext(this, "ReduceHandler#" + reduceCounter.getAndAdd(1), handler);
+        } else if (handler instanceof ProcessHandler) {
+            newCtx = new DefaultHandlerContext(this, "ProcessHandler#" + processCounter.getAndAdd(1), handler);
         } else {
             throw new IllegalArgumentException("handler must be ProcessHandler or ReduceHandler");
         }
@@ -107,12 +118,12 @@ public class HandlerPipeline {
         head.fireReceive();
     }
 
-    public void download(Seed seed) {
-        head.fireDownload(seed);
+    public void download(Seed seed, Scheduler scheduler, boolean async) {
+        head.fireDownload(seed, scheduler, async);
     }
 
 
-    final class HeadContext extends AbstractHandlerContext implements ProcessHandler,ReduceHandler {
+    final class HeadContext extends AbstractHandlerContext implements ProcessHandler, ReduceHandler {
 
         public HeadContext(HandlerPipeline pipeline) {
             super(false, true, pipeline, "head");
@@ -124,7 +135,7 @@ public class HandlerPipeline {
         }
 
         @Override
-        public void download(HandlerContext ctx,Seed seed) {
+        public void download(HandlerContext ctx, Seed seed, Scheduler scheduler, boolean async) {
 
         }
 
@@ -156,7 +167,7 @@ public class HandlerPipeline {
         }
 
         @Override
-        public void download(HandlerContext ctx, Seed seed) {
+        public void download(HandlerContext ctx, Seed seed, Scheduler scheduler, boolean async) {
 
         }
 

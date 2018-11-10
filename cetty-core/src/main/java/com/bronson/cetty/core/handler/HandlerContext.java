@@ -4,6 +4,7 @@ import com.bronson.cetty.core.Cetty;
 import com.bronson.cetty.core.Page;
 import com.bronson.cetty.core.Result;
 import com.bronson.cetty.core.Seed;
+import com.bronson.cetty.core.scheduler.Scheduler;
 
 /**
  * @author heyingcai
@@ -40,8 +41,10 @@ public interface HandlerContext {
      * pass the download event to next handler
      *
      * @param seed
+     * @param scheduler
+     * @param async
      */
-    void fireDownload(Seed seed);
+    void fireDownload(Seed seed, Scheduler scheduler, boolean async);
 
     /**
      * pass the process event to next handler

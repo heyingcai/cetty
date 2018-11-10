@@ -3,6 +3,7 @@ package com.bronson.cetty.core.handler;
 import com.bronson.cetty.core.Cetty;
 import com.bronson.cetty.core.Page;
 import com.bronson.cetty.core.Seed;
+import com.bronson.cetty.core.scheduler.Scheduler;
 
 /**
  * page handler initial
@@ -18,7 +19,7 @@ public abstract class HandlerInitializer implements ProcessHandler {
     }
 
     @Override
-    public void download(HandlerContext ctx, Seed seed) {
+    public void download(HandlerContext ctx, Seed seed, Scheduler scheduler, boolean async) {
 
     }
 

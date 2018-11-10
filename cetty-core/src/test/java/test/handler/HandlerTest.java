@@ -1,12 +1,13 @@
 package test.handler;
 
 import com.bronson.cetty.core.Cetty;
-import com.bronson.cetty.core.Payload;
+import com.bronson.cetty.core.Seed;
 import com.bronson.cetty.core.handler.HandlerInitializer;
 import com.bronson.cetty.core.handler.HandlerPipeline;
 import com.bronson.cetty.core.handler.HttpDownloadHandler;
 import com.bronson.cetty.core.handler.PageProcessHandler;
-import com.bronson.cetty.core.handler.PipelineHandler;
+import com.bronson.cetty.core.scheduler.QueueScheduler;
+import com.bronson.cetty.core.scheduler.Scheduler;
 
 /**
  * @author heyingcai
@@ -24,15 +25,15 @@ public class HandlerTest {
                 HandlerPipeline pipeline = cetty.pipeline();
                 pipeline.addLast(new HttpDownloadHandler());
                 pipeline.addLast(new PageProcessHandler());
-                pipeline.addLast(new PipelineHandler());
             }
         });
 
         pipeline.start();
 
-        Payload payload = new Payload();
-        payload.setDomain("http:www.baidu.com");
-        pipeline.download(payload);
+        Seed seed = new Seed("");
+        Scheduler scheduler = new QueueScheduler();
+
+        pipeline.download(seed, scheduler, false);
     }
 
 }

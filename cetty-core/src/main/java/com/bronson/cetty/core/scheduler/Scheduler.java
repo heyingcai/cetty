@@ -7,8 +7,18 @@ import com.bronson.cetty.core.Seed;
  */
 public interface Scheduler {
 
+    /**
+     * push the seed to scheduler
+     *
+     * @param seed
+     */
     void push(Seed seed);
 
+    /**
+     * poll the seed from scheduler
+     *
+     * @return
+     */
     Seed poll();
 
 }
