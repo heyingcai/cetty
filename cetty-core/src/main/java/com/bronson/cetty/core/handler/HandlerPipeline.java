@@ -2,9 +2,7 @@ package com.bronson.cetty.core.handler;
 
 import com.bronson.cetty.core.Cetty;
 import com.bronson.cetty.core.Page;
-import com.bronson.cetty.core.Result;
 import com.bronson.cetty.core.Seed;
-import com.bronson.cetty.core.scheduler.Scheduler;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -92,6 +90,19 @@ public class HandlerPipeline {
         next.prev = prev;
     }
 
+    public HandlerPipeline addLast(Handler handler, String name) {
+        DefaultHandlerContext newCtx = null;
+        if (handler instanceof ReduceHandler) {
+            newCtx = new DefaultHandlerContext(this, name, handler);
+        } else if (handler instanceof ProcessHandler) {
+            newCtx = new DefaultHandlerContext(this, name, handler);
+        } else {
+            throw new IllegalArgumentException("handler must be ProcessHandler or ReduceHandler");
+        }
+        addLast0(newCtx);
+        return this;
+    }
+
     public HandlerPipeline addLast(Handler handler) {
         DefaultHandlerContext newCtx = null;
         if (handler instanceof ReduceHandler) {
@@ -118,8 +129,8 @@ public class HandlerPipeline {
         head.fireReceive();
     }
 
-    public void download(Seed seed, Scheduler scheduler, boolean async) {
-        head.fireDownload(seed, scheduler, async);
+    public void download(Seed seed, boolean async) {
+        head.fireDownload(seed, async);
     }
 
 
@@ -135,7 +146,7 @@ public class HandlerPipeline {
         }
 
         @Override
-        public void download(HandlerContext ctx, Seed seed, Scheduler scheduler, boolean async) {
+        public void download(HandlerContext ctx, Seed seed, boolean async) {
 
         }
 
@@ -150,8 +161,8 @@ public class HandlerPipeline {
         }
 
         @Override
-        public void reduce(HandlerContext ctx, Result result) {
-            ctx.fireReduce(result);
+        public void reduce(HandlerContext ctx, Page page) {
+            ctx.fireReduce(page);
         }
     }
 
@@ -167,7 +178,7 @@ public class HandlerPipeline {
         }
 
         @Override
-        public void download(HandlerContext ctx, Seed seed, Scheduler scheduler, boolean async) {
+        public void download(HandlerContext ctx, Seed seed, boolean async) {
 
         }
 
@@ -180,6 +191,7 @@ public class HandlerPipeline {
         public Handler handler() {
             return this;
         }
+
     }
 
 }

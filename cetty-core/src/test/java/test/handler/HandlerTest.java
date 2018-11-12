@@ -6,8 +6,6 @@ import com.bronson.cetty.core.handler.HandlerInitializer;
 import com.bronson.cetty.core.handler.HandlerPipeline;
 import com.bronson.cetty.core.handler.HttpDownloadHandler;
 import com.bronson.cetty.core.handler.PageProcessHandler;
-import com.bronson.cetty.core.scheduler.QueueScheduler;
-import com.bronson.cetty.core.scheduler.Scheduler;
 
 /**
  * @author heyingcai
@@ -31,9 +29,8 @@ public class HandlerTest {
         pipeline.start();
 
         Seed seed = new Seed("");
-        Scheduler scheduler = new QueueScheduler();
 
-        pipeline.download(seed, scheduler, false);
+        pipeline.download(seed, false);
     }
 
 }

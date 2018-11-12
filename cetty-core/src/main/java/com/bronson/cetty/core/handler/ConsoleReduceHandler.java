@@ -5,10 +5,10 @@ import com.bronson.cetty.core.Page;
 /**
  * @author heyingcai
  */
-public class ReduceHandlerAdapter implements ReduceHandler {
+public class ConsoleReduceHandler extends ReduceHandlerAdapter{
 
     @Override
     public void reduce(HandlerContext ctx, Page page) {
-        ctx.fireReduce(page);
+        System.out.println(page.getResult());
     }
 }

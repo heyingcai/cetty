@@ -24,6 +24,11 @@ public class Payload {
     private String userAgent;
 
     /**
+     * set charset
+     */
+    private String charset;
+
+    /**
      * set proxy
      */
     private Proxy proxy;
@@ -84,6 +89,14 @@ public class Payload {
 
     public String getDomain() {
         return domain;
+    }
+
+    public String getCharset() {
+        return charset;
+    }
+
+    public void setCharset(String charset) {
+        this.charset = charset;
     }
 
     public Payload setUserAgent(String userAgent) {
@@ -148,6 +161,10 @@ public class Payload {
     public Payload addHeaders(Map<String, String> headerMap) {
         headers.putAll(headerMap);
         return this;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 
     public Payload setSocketTimeout(int socketTimeout) {

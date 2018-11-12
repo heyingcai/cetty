@@ -19,7 +19,7 @@ public abstract class HandlerInitializer implements ProcessHandler {
     }
 
     @Override
-    public void download(HandlerContext ctx, Seed seed, Scheduler scheduler, boolean async) {
+    public void download(HandlerContext ctx, Seed seed, boolean async) {
 
     }
 

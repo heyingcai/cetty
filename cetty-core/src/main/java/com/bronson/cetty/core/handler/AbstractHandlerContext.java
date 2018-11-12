@@ -2,9 +2,8 @@ package com.bronson.cetty.core.handler;
 
 import com.bronson.cetty.core.Cetty;
 import com.bronson.cetty.core.Page;
-import com.bronson.cetty.core.Result;
+import com.bronson.cetty.core.Payload;
 import com.bronson.cetty.core.Seed;
-import com.bronson.cetty.core.scheduler.Scheduler;
 
 /**
  * @author heyingcai
@@ -57,25 +56,30 @@ public abstract class AbstractHandlerContext implements HandlerContext {
     }
 
     @Override
-    public void fireDownload(Seed seed, Scheduler scheduler, boolean async) {
+    public void fireDownload(Seed seed, boolean async) {
         final AbstractHandlerContext next = findContextProcess();
-        next.invokeDownload(seed, scheduler, async);
+        next.invokeDownload(seed, async);
     }
 
-    private void invokeDownload(Seed seed, Scheduler scheduler, boolean async) {
+    private void invokeDownload(Seed seed, boolean async) {
         ProcessHandler processHandler = (ProcessHandler) handler();
-        processHandler.download(this, seed, scheduler, async);
+        processHandler.download(this, seed, async);
     }
 
     @Override
-    public void fireReduce(Result result) {
+    public void fireReduce(Page page) {
         final AbstractHandlerContext next = findContextReduce();
-        next.invokeReduce(result);
+        if (next.prev != null && next.prev.isProcessEvent()) {
+            if (!page.getNextSeeds().isEmpty()) {
+                page.getNextSeeds().forEach(seed -> pipeline.cetty().getScheduler().push(seed));
+            }
+        }
+        next.invokeReduce(page);
     }
 
-    private void invokeReduce(Result result) {
+    private void invokeReduce(Page page) {
         ReduceHandler reduceHandler = (ReduceHandler) handler();
-        reduceHandler.reduce(this, result);
+        reduceHandler.reduce(this, page);
     }
 
     @Override

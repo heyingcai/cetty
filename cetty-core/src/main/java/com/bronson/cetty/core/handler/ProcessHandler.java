@@ -1,8 +1,8 @@
 package com.bronson.cetty.core.handler;
 
 import com.bronson.cetty.core.Page;
+import com.bronson.cetty.core.Payload;
 import com.bronson.cetty.core.Seed;
-import com.bronson.cetty.core.scheduler.Scheduler;
 
 /**
  * process handler
@@ -23,10 +23,9 @@ public interface ProcessHandler extends Handler {
      *
      * @param ctx
      * @param seed
-     * @param scheduler
      * @param async
      */
-    void download(HandlerContext ctx, Seed seed, Scheduler scheduler, boolean async);
+    void download(HandlerContext ctx, Seed seed, boolean async);
 
     /**
      * process the request
