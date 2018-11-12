@@ -10,16 +10,20 @@ import com.bronson.cetty.core.handler.PageProcessHandler;
 public class BootstrapTest {
 
     public static void main(String[] args) {
-        Payload custom = Payload.custom();
-        custom.setDomain("www.baidu.com").setCharset("utf-8");
-
+        //启动引导类
         Bootstrap.
                 me().
+                //是否异步抓取
                 isAsync(false).
+                //开启线程数
                 setThreadNum(1).
+                //起始url
                 startUrl("http://www.baidu.com").
-                setPayload(custom).
+                //全局请求信息
+                setPayload(Payload.custom()).
+                //自定也页面处理handler
                 addHandler(new PageProcessHandler()).
+                //启动
                 start();
     }
 }
