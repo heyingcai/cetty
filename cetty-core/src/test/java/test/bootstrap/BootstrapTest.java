@@ -21,7 +21,7 @@ public class BootstrapTest {
                 startUrl("http://www.baidu.com").
                 //全局请求信息
                 setPayload(Payload.custom()).
-                //自定也页面处理handler
+                //自定处理器handler
                 addHandler(new PageProcessHandler()).
                 //启动
                 start();

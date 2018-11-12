@@ -8,13 +8,12 @@
 
 >A Event Dispatch crawler framework. 
 
-![](https://s1.ax1x.com/2018/11/12/iOAh8O.png)
+![](https://s1.ax1x.com/2018/11/12/iOAjG8.png)
 
 ## 功能介绍
 * 基于完全自定义事件处理机制的爬虫框架。
 * 模块化的设计，提供强大的可扩展性。
 * 基于HttpClient支持同步和异步数据抓取。
-* 提供丰富的抽取页面API。
 * 支持多线程。
 * 基于Jsoup页面解析框架提供强大的网页解析处理能力。
 
