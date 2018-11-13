@@ -27,7 +27,6 @@ public class AsyncHttpClientTest {
 
         HttpRequestBase httpGet = new HttpGet("http://www.baidu.com");
 
-
         Future<HttpResponse> execute = client.execute(httpGet, new Back());
     }
 

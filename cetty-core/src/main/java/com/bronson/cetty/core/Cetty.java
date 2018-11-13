@@ -43,13 +43,11 @@ public class Cetty implements Runnable {
 
     private int threadNum = 1;
 
-    private Thread mainThread = null;
-
     private ReentrantLock newTask = new ReentrantLock();
 
     private Condition newTaskCondition = newTask.newCondition();
 
-    private long newTaskWaitTime = 60000;
+    private long newTaskWaitTime = 30000;
 
     private List<Seed> startSeeds;
 
@@ -196,51 +194,30 @@ public class Cetty implements Runnable {
                 });
             }
         }
-
         stopCrawler();
-        mainThread = null;
-        stat.set(STAT_INIT);
     }
 
     public void stopCrawler() {
-        if (!stat.compareAndSet(STAT_RUNNING, STAT_STOPPED)) {
-            return;
-        }
-
-        logger.info("Cetty crawler closed!");
-
-        if (mainThread != null && !mainThread.isInterrupted()) {
-            mainThread.interrupt();
+        if (stat.compareAndSet(STAT_RUNNING, STAT_STOPPED)) {
+            logger.info("Cetty crawler closed!");
         }
     }
 
     public void startCrawler() {
-        if (mainThread != null) {
-            return;
-        }
-        synchronized (this) {
-            if (mainThread != null) {
-                return;
-            }
-            Thread mainThread = new Thread(this, "Cetty-crawler");
-            mainThread.setDaemon(false);
-            this.mainThread = mainThread;
-            this.mainThread.start();
-        }
+        Thread thread = new Thread(this);
+        thread.setDaemon(false);
+        thread.start();
     }
 
     private void waitTask() {
         newTask.lock();
-
         try {
             if (threadPoolExecutor.getActiveCount() == 0 || stat.get() == STAT_STOPPED) {
                 return;
             }
-            try {
-                newTaskCondition.await(newTaskWaitTime, TimeUnit.MILLISECONDS);
-            } catch (InterruptedException e) {
-                logger.error("waitNewTask interrupted, error {}", e);
-            }
+            newTaskCondition.await(newTaskWaitTime, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            logger.warn("waitNewTask interrupted, error {}", e);
         } finally {
             newTask.unlock();
         }
@@ -269,8 +246,6 @@ public class Cetty implements Runnable {
 
     private void initComponent() {
         HandlerPipeline pipeline = this.pipeline();
-
-        mainThread = Thread.currentThread();
 
         if (async) {
             asyncHttpClientGenerator = new AsyncHttpClientGenerator();

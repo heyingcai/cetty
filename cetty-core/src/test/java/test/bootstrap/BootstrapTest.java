@@ -14,7 +14,7 @@ public class BootstrapTest {
         Bootstrap.
                 me().
                 //是否异步抓取
-                isAsync(false).
+                isAsync(true).
                 //开启线程数
                 setThreadNum(1).
                 //起始url

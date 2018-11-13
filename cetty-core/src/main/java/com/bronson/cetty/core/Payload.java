@@ -26,7 +26,7 @@ public class Payload {
     /**
      * set charset
      */
-    private String charset;
+    private String charset = "utf-8";
 
     /**
      * set proxy
@@ -95,8 +95,9 @@ public class Payload {
         return charset;
     }
 
-    public void setCharset(String charset) {
+    public Payload setCharset(String charset) {
         this.charset = charset;
+        return this;
     }
 
     public Payload setUserAgent(String userAgent) {
