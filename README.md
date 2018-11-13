@@ -6,7 +6,7 @@
 [![](https://img.shields.io/badge/language-java-yellowgreen.svg)](https://img.shields.io/badge/language-java-yellowgreen.svg)
 
 
->A Event Dispatch crawler framework. 
+>An event dispatch crawler framework. 
 
 ![](https://s1.ax1x.com/2018/11/12/iOAjG8.png)
 
