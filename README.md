@@ -73,3 +73,9 @@ public class Tianya extends ProcessHandlerAdapter {
 }
 ```
 
+## TODO
+
+* 支持代理池
+* 支持Berkeley 内存数据作为url管理器，提供海量url存储并提高存取效率
+* 支持热更新
+
