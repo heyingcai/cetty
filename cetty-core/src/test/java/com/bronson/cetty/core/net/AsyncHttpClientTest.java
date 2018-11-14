@@ -1,7 +1,5 @@
-package test.net;
+package com.bronson.cetty.core.net;
 
-import com.bronson.cetty.core.net.AsyncHttpClientGenerator;
-import com.bronson.cetty.core.net.HttpClientGenerator;
 import com.bronson.cetty.core.Payload;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;

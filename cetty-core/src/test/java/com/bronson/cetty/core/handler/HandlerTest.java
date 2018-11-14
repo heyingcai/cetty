@@ -1,11 +1,7 @@
-package test.handler;
+package com.bronson.cetty.core.handler;
 
 import com.bronson.cetty.core.Cetty;
 import com.bronson.cetty.core.Seed;
-import com.bronson.cetty.core.handler.HandlerInitializer;
-import com.bronson.cetty.core.handler.HandlerPipeline;
-import com.bronson.cetty.core.handler.HttpDownloadHandler;
-import com.bronson.cetty.core.handler.PageProcessHandler;
 
 /**
  * @author heyingcai

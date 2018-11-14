@@ -1,25 +1,19 @@
-# Cetty
+package com.bronson.cetty.sample.tianya;
 
-一个轻量级的基于事件分发的爬虫框架。
+import com.bronson.cetty.core.Bootstrap;
+import com.bronson.cetty.core.Page;
+import com.bronson.cetty.core.Payload;
+import com.bronson.cetty.core.Result;
+import com.bronson.cetty.core.handler.ConsoleReduceHandler;
+import com.bronson.cetty.core.handler.HandlerContext;
+import com.bronson.cetty.core.handler.ProcessHandlerAdapter;
+import com.google.common.collect.Lists;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
-[![Build Status](https://www.travis-ci.org/heyingcai/cetty.svg?branch=master)](https://travis-ci.org/heyingcai/cetty)
-[![](https://img.shields.io/badge/language-java-yellowgreen.svg)](https://img.shields.io/badge/language-java-yellowgreen.svg)
+import java.util.List;
 
-
->An event dispatch crawler framework. 
-
-![](https://s1.ax1x.com/2018/11/12/iOAjG8.png)
-
-## 功能介绍
-* 基于完全自定义事件处理机制的爬虫框架。
-* 模块化的设计，提供强大的可扩展性。
-* 基于HttpClient支持同步和异步数据抓取。
-* 支持多线程。
-* 基于Jsoup页面解析框架提供强大的网页解析处理能力。
-
-## 让我们来写第一个demo
-
-```java
 /**
  * 抓取天涯论坛文章列表标题
  * http://bbs.tianya.cn/list-333-1.shtml
@@ -46,7 +40,7 @@ public class Tianya extends ProcessHandlerAdapter {
         //获取Result对象，将我们解析出来的结果向下一个handler传递
         Result result = page.getResult();
         result.addResults(titles);
-        
+
         //通过fireXXX 方法将本handler 处理的结果向下传递
         //本教程直接将结果传递给ConsoleHandler，将结果直接输出控制台
         ctx.fireReduce(page);
@@ -71,5 +65,3 @@ public class Tianya extends ProcessHandlerAdapter {
                 start();
     }
 }
-```
-

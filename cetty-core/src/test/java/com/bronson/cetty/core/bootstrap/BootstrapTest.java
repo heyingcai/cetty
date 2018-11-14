@@ -1,4 +1,4 @@
-package test.bootstrap;
+package com.bronson.cetty.core.bootstrap;
 
 import com.bronson.cetty.core.Bootstrap;
 import com.bronson.cetty.core.Payload;

@@ -53,4 +53,10 @@ public class Result {
     public Seed getSeed() {
         return seed;
     }
+
+    @Override
+    public String toString() {
+        Object result = resultList.isEmpty() ? fieldResult : resultList;
+        return result.toString();
+    }
 }

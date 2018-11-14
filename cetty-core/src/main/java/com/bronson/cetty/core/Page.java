@@ -16,7 +16,7 @@ public class Page {
 
     private Seed seed;
 
-    private Result result;
+    private Result result = new Result();
 
     private String rawData;
 
