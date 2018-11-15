@@ -47,6 +47,8 @@ public class Cetty implements Runnable {
 
     private Condition newTaskCondition = newTask.newCondition();
 
+    private AtomicInteger activeTask = new AtomicInteger(0);
+
     private long newTaskWaitTime = 30000;
 
     private List<Seed> startSeeds;
@@ -175,7 +177,7 @@ public class Cetty implements Runnable {
         initComponent();
         logger.info("Crawler started!");
         while (!Thread.currentThread().isInterrupted() && stat.get() == STAT_RUNNING) {
-            Seed seed = scheduler.poll();
+            final Seed seed = scheduler.poll();
 
             if (seed == null) {
                 if (threadPoolExecutor.getActiveCount() == 0 || stat.get() == STAT_STOPPED) {
@@ -183,18 +185,30 @@ public class Cetty implements Runnable {
                 }
                 waitTask();
             } else {
-                threadPoolExecutor.execute(() -> {
-                    try {
-                        pipeline.download(seed, async);
-                    } catch (Exception e) {
-                        logger.error("Cetty crawler run error {}", e);
-                    } finally {
-                        signalTask();
-                    }
-                });
+                threadPoolExecutor.execute(new SeedTask(seed));
             }
         }
         stopCrawler();
+    }
+
+    private class SeedTask implements Runnable {
+
+        private Seed seed;
+
+        SeedTask(Seed seed) {
+            this.seed = seed;
+        }
+
+        @Override
+        public void run() {
+            try {
+                pipeline.download(seed);
+            } catch (Exception e) {
+                logger.error("Cetty crawler run error {}", e);
+            } finally {
+                signalTask();
+            }
+        }
     }
 
     public void stopCrawler() {

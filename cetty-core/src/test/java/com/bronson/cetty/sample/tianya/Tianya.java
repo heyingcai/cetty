@@ -4,6 +4,7 @@ import com.bronson.cetty.core.Bootstrap;
 import com.bronson.cetty.core.Page;
 import com.bronson.cetty.core.Payload;
 import com.bronson.cetty.core.Result;
+import com.bronson.cetty.core.Seed;
 import com.bronson.cetty.core.handler.ConsoleReduceHandler;
 import com.bronson.cetty.core.handler.HandlerContext;
 import com.bronson.cetty.core.handler.ProcessHandlerAdapter;
@@ -37,6 +38,9 @@ public class Tianya extends ProcessHandlerAdapter {
             titles.add(title);
         }
 
+        //添加下一页的请求
+        page.addNextSeed(new Seed("http://bbs.tianya.cn/list.jsp?item=333&nextid=1542249901000"));
+
         //获取Result对象，将我们解析出来的结果向下一个handler传递
         Result result = page.getResult();
         result.addResults(titles);
@@ -47,11 +51,12 @@ public class Tianya extends ProcessHandlerAdapter {
     }
 
     public static void main(String[] args) {
+
         //启动引导类
         Bootstrap.
                 me().
                 //使用同步抓取
-                        isAsync(false).
+                        isAsync(true).
                 //开启一个线程
                         setThreadNum(1).
                 //抓取入口url

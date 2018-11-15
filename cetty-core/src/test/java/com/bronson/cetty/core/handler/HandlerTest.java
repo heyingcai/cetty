@@ -26,7 +26,7 @@ public class HandlerTest {
 
         Seed seed = new Seed("");
 
-        pipeline.download(seed, false);
+        pipeline.download(seed);
     }
 
 }

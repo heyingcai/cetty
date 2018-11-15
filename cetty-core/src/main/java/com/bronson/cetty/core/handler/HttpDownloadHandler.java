@@ -44,11 +44,13 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(HttpDownloadHandler.class);
 
     @Override
-    public void download(HandlerContext ctx, Seed seed, boolean async) {
+    public void download(HandlerContext ctx, Seed seed) {
         Payload payload = ctx.cetty().getPayload();
         if (payload == null) {
             throw new NullPointerException("payload can not be null");
         }
+        //get cetty state
+        boolean async = ctx.cetty().isAsync();
         if (async) {
             asyncHttpClientDownload(ctx, seed);
         } else {

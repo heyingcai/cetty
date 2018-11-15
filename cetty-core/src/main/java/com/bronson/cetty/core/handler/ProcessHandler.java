@@ -23,9 +23,8 @@ public interface ProcessHandler extends Handler {
      *
      * @param ctx
      * @param seed
-     * @param async
      */
-    void download(HandlerContext ctx, Seed seed, boolean async);
+    void download(HandlerContext ctx, Seed seed);
 
     /**
      * process the request

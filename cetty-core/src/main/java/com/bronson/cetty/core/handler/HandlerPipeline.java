@@ -129,8 +129,8 @@ public class HandlerPipeline {
         head.fireReceive();
     }
 
-    public void download(Seed seed, boolean async) {
-        head.fireDownload(seed, async);
+    public void download(Seed seed) {
+        head.fireDownload(seed);
     }
 
 
@@ -146,7 +146,7 @@ public class HandlerPipeline {
         }
 
         @Override
-        public void download(HandlerContext ctx, Seed seed, boolean async) {
+        public void download(HandlerContext ctx, Seed seed) {
 
         }
 
@@ -178,8 +178,8 @@ public class HandlerPipeline {
         }
 
         @Override
-        public void download(HandlerContext ctx, Seed seed, boolean async) {
-
+        public void download(HandlerContext ctx, Seed seed) {
+            throw new UnsupportedOperationException();
         }
 
         @Override

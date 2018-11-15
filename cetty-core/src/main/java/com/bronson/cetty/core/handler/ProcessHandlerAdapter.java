@@ -15,8 +15,8 @@ public abstract class ProcessHandlerAdapter implements ProcessHandler {
     }
 
     @Override
-    public void download(HandlerContext ctx, Seed seed, boolean async) {
-        ctx.fireDownload(seed, async);
+    public void download(HandlerContext ctx, Seed seed) {
+        ctx.fireDownload(seed);
     }
 
     @Override

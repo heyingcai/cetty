@@ -40,9 +40,8 @@ public interface HandlerContext {
      * pass the download event to next handler
      *
      * @param seed
-     * @param async
      */
-    void fireDownload(Seed seed, boolean async);
+    void fireDownload(Seed seed);
 
     /**
      * pass the process event to next handler
