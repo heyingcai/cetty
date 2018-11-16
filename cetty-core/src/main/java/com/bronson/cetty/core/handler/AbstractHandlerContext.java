@@ -3,11 +3,15 @@ package com.bronson.cetty.core.handler;
 import com.bronson.cetty.core.Cetty;
 import com.bronson.cetty.core.Page;
 import com.bronson.cetty.core.Seed;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author heyingcai
  */
 public abstract class AbstractHandlerContext implements HandlerContext {
+
+    private static final Logger logger = LoggerFactory.getLogger(AbstractHandlerContext.class);
 
     volatile AbstractHandlerContext prev;
     volatile AbstractHandlerContext next;
@@ -74,6 +78,13 @@ public abstract class AbstractHandlerContext implements HandlerContext {
             }
         }
         next.invokeReduce(page);
+        if (next.next.name().equals("tail")) {
+            try {
+                Thread.sleep(pipeline.cetty().getPayload().getSleepTime());
+            } catch (InterruptedException e) {
+                logger.error("Thread interrupted when sleep", e);
+            }
+        }
     }
 
     private void invokeReduce(Page page) {

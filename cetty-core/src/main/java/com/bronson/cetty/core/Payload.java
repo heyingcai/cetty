@@ -69,6 +69,11 @@ public class Payload {
     private int retryTimes = 0;
 
     /**
+     * each seed sleep time
+     */
+    private int sleepTime = 500;
+
+    /**
      * sometime there unsupported cookie
      */
     private boolean unsupportedCookie = false;
@@ -197,6 +202,15 @@ public class Payload {
 
     public Payload setRetryTimes(int retryTimes) {
         this.retryTimes = retryTimes;
+        return this;
+    }
+
+    public int getSleepTime() {
+        return sleepTime;
+    }
+
+    public Payload setSleepTime(int sleepTime) {
+        this.sleepTime = sleepTime;
         return this;
     }
 

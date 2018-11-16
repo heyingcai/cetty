@@ -67,7 +67,7 @@ public class Tianya extends ProcessHandlerAdapter {
                 //抓取入口url
                         startUrl("http://bbs.tianya.cn/list-333-1.shtml").
                 //通用请求信息
-                        setPayload(Payload.custom()).
+                        setPayload(Payload.custom().setSleepTime(5000)).
                 //添加自定处理器
                         addHandler(new Tianya()).
                 //添加默认结果处理器，输出致控制台
