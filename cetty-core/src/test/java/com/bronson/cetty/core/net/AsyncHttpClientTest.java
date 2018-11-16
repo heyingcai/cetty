@@ -23,9 +23,41 @@ public class AsyncHttpClientTest {
 
         client.start();
 
-        HttpRequestBase httpGet = new HttpGet("http://www.baidu.com");
+        final HttpGet[] requests = new HttpGet[]{
+                new HttpGet("http://www.apache.org/"),
+                new HttpGet("http://www.baidu.com/"),
+                new HttpGet("http://www.oschina.net/")
+        };
 
-        Future<HttpResponse> execute = client.execute(httpGet, new Back());
+        for(final HttpGet request: requests){
+            client.execute(request, new FutureCallback(){
+                @Override
+                public void completed(Object obj) {
+                    final HttpResponse response = (HttpResponse)obj;
+                    System.out.println(request.getRequestLine() + "->" + response.getStatusLine());
+                }
+
+                @Override
+                public void failed(Exception excptn) {
+                    System.out.println(request.getRequestLine() + "->" + excptn);
+                }
+
+                @Override
+                public void cancelled() {
+                    System.out.println(request.getRequestLine() + "cancelled");
+                }
+            });
+        }
+
+
+//        for (int i = 0; i < 2; i++) {
+//            HttpRequestBase httpGet = new HttpGet("http://www.baidu.com");
+//            client.execute(httpGet, new Back());
+//            System.out.println("index :" + i);
+//            httpGet.releaseConnection();
+//        }
+
+//        client.execute(httpGet, new Back());
     }
 
     static class Back implements FutureCallback<HttpResponse> {

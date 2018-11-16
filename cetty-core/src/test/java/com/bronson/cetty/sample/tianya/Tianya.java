@@ -38,8 +38,13 @@ public class Tianya extends ProcessHandlerAdapter {
             titles.add(title);
         }
 
+        String href = document.select("div#bbsdoc>div#bd>div#main>div.short-pages-2>div.links>a[rel=nofollow]").first().attr("abs:href");
+
         //添加下一页的请求
-        page.addNextSeed(new Seed("http://bbs.tianya.cn/list.jsp?item=333&nextid=1542249901000"));
+        page.addNextSeed(new Seed(href));
+
+        //添加下一页的请求
+//        page.addNextSeed(new Seed("http://bbs.tianya.cn/list.jsp?item=333&nextid=1542249901000"));
 
         //获取Result对象，将我们解析出来的结果向下一个handler传递
         Result result = page.getResult();

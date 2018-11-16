@@ -14,6 +14,7 @@ import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -47,7 +48,7 @@ public class Cetty implements Runnable {
 
     private Condition newTaskCondition = newTask.newCondition();
 
-    private AtomicInteger activeTask = new AtomicInteger(0);
+    private long stopAwaitTime = 10;
 
     private long newTaskWaitTime = 30000;
 
@@ -62,6 +63,10 @@ public class Cetty implements Runnable {
     private HttpClientGenerator<CloseableHttpAsyncClient> asyncHttpClientGenerator;
 
     private HttpClientGenerator<CloseableHttpClient> httpClientHttpClientGenerator;
+
+    private CloseableHttpAsyncClient httpAsyncClient;
+
+    private CloseableHttpClient httpClient;
 
     /**
      * crawler request payload
@@ -86,6 +91,7 @@ public class Cetty implements Runnable {
         if (!hasDownloadHandler) {
             pipeline.addLast(new HttpDownloadHandler(), "downloader");
         }
+
     }
 
     public Cetty setPayload(Payload payload) {
@@ -166,6 +172,14 @@ public class Cetty implements Runnable {
         return httpClientHttpClientGenerator;
     }
 
+    public CloseableHttpClient getHttpClient() {
+        return httpClient;
+    }
+
+    public CloseableHttpAsyncClient getHttpAsyncClient() {
+        return httpAsyncClient;
+    }
+
     public Cetty setThreadNum(int threadNum) {
         this.threadNum = threadNum;
         return this;
@@ -180,12 +194,20 @@ public class Cetty implements Runnable {
             final Seed seed = scheduler.poll();
 
             if (seed == null) {
-                if (threadPoolExecutor.getActiveCount() == 0 || stat.get() == STAT_STOPPED) {
+                if (stat.get() == STAT_STOPPED) {
                     break;
                 }
                 waitTask();
             } else {
                 threadPoolExecutor.execute(new SeedTask(seed));
+            }
+        }
+        if (!threadPoolExecutor.isShutdown()) {
+            threadPoolExecutor.isShutdown();
+            try {
+                threadPoolExecutor.awaitTermination(stopAwaitTime, TimeUnit.MINUTES);
+            } catch (InterruptedException e) {
+                logger.error("Cetty crawler wait failed !");
             }
         }
         stopCrawler();
@@ -215,12 +237,35 @@ public class Cetty implements Runnable {
         if (stat.compareAndSet(STAT_RUNNING, STAT_STOPPED)) {
             logger.info("Cetty crawler closed!");
         }
+
+        closeObject();
+
+        if (!Thread.currentThread().isInterrupted()) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     public void startCrawler() {
         Thread thread = new Thread(this);
         thread.setDaemon(false);
         thread.start();
+    }
+
+    private void closeObject() {
+        if (httpAsyncClient != null) {
+            try {
+                httpAsyncClient.close();
+            } catch (IOException e) {
+                logger.warn("close httpAsyncClient error {}", e);
+            }
+        }
+        if (httpClient != null) {
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                logger.warn("close httpClient error {}", e);
+            }
+        }
     }
 
     private void waitTask() {
@@ -263,8 +308,11 @@ public class Cetty implements Runnable {
 
         if (async) {
             asyncHttpClientGenerator = new AsyncHttpClientGenerator();
+            httpAsyncClient = asyncHttpClientGenerator.getClient(getPayload());
+            httpAsyncClient.start();
         } else {
             httpClientHttpClientGenerator = new SyncHttpClientGenerator();
+            httpClient = httpClientHttpClientGenerator.getClient(getPayload());
         }
 
         boolean threadPoolAvailable = threadNum > 0 && threadPoolExecutor == null || threadPoolExecutor.isShutdown();

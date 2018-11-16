@@ -60,8 +60,8 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
 
     private void httpClientDownload(HandlerContext ctx, Seed seed) {
         Payload payload = ctx.cetty().getPayload();
-        CloseableHttpClient httpClient = ctx.cetty().getHttpClientHttpClientGenerator().getClient(payload);
 
+        CloseableHttpClient httpClient = ctx.cetty().getHttpClient();
         CloseableHttpResponse httpResponse = null;
 
         Page page;
@@ -82,11 +82,10 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
 
     private void asyncHttpClientDownload(HandlerContext ctx, Seed seed) {
         Payload payload = ctx.cetty().getPayload();
-        CloseableHttpAsyncClient httpAsyncClient = ctx.cetty().getAsyncHttpClientGenerator().getClient(ctx.cetty().getPayload());
+        CloseableHttpAsyncClient httpAsyncClient = ctx.cetty().getHttpAsyncClient();
 
-        httpAsyncClient.start();
         try {
-            httpAsyncClient.execute(convertHttpUriRequest(seed, payload), convertHttpClientContext(payload), new CallBack(seed, ctx, payload, httpAsyncClient));
+            httpAsyncClient.execute(convertHttpUriRequest(seed, payload), convertHttpClientContext(payload), new CallBack(seed, ctx, payload));
         } catch (Exception e) {
             logger.warn("download {} page error !", seed.getUrl(), e);
         }
@@ -97,13 +96,11 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
         private final Seed seed;
         private final HandlerContext ctx;
         private final Payload payload;
-        private final CloseableHttpAsyncClient httpAsyncClient;
 
-        public CallBack(Seed seed, HandlerContext ctx, Payload payload, CloseableHttpAsyncClient httpAsyncClient) {
+        public CallBack(Seed seed, HandlerContext ctx, Payload payload) {
             this.seed = seed;
             this.ctx = ctx;
             this.payload = payload;
-            this.httpAsyncClient = httpAsyncClient;
         }
 
         @Override
@@ -115,10 +112,8 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
             } catch (IOException e) {
                 logger.warn("download {} page error !", seed.getUrl(), e);
             } finally {
-                try {
-                    httpAsyncClient.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (httpResponse != null) {
+                    EntityUtils.consumeQuietly(httpResponse.getEntity());
                 }
             }
         }
@@ -126,32 +121,11 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
         @Override
         public void failed(Exception e) {
             logger.warn("download {} page error !", seed.getUrl(), e);
-            Thread thread = new Thread(() -> {
-                try {
-                    // 发生连接超时等异常时，failed回调执行到client.close()方法；
-                    // 但是可能会在this.reactorThread.join()这里无限期阻塞。
-                    // 可能哪个地方形成了死锁，所以这里用一个超时中断，结束Reactor I/O线程的死锁。
-                    httpAsyncClient.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            });
-            thread.start();
-            try {
-                thread.join(3000);
-                Thread.currentThread().interrupt();
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            }
         }
 
         @Override
         public void cancelled() {
-            try {
-                httpAsyncClient.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            logger.warn("download {} page cancelled", seed.getUrl());
         }
     }
 
