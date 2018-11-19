@@ -17,6 +17,9 @@
 * 支持多线程。
 * 基于Jsoup页面解析框架提供强大的网页解析处理能力。
 
+## 详细文档
+传送门[http://cetty.jibug.com/](http://cetty.jibug.com/)
+
 ## 让我们来写第一个demo
 
 ```java
