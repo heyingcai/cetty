@@ -60,17 +60,17 @@ public class Tianya extends ProcessHandlerAdapter {
         Bootstrap.
                 me().
                 //使用同步抓取
-                        isAsync(false).
+                isAsync(false).
                 //开启一个线程
-                        setThreadNum(1).
+                setThreadNum(1).
                 //抓取入口url
-                        startUrl("http://bbs.tianya.cn/list-333-1.shtml").
+                startUrl("http://bbs.tianya.cn/list-333-1.shtml").       
                 //通用请求信息
-                        setPayload(Payload.custom()).
+                setPayload(Payload.custom()).        
                 //添加自定处理器
-                        addHandler(new Tianya()).
+                addHandler(new Tianya()).        
                 //添加默认结果处理器，输出致控制台
-                        addHandler(new ConsoleReduceHandler()).
+                addHandler(new ConsoleReduceHandler()).        
                 start();
     }
 }
@@ -78,6 +78,7 @@ public class Tianya extends ProcessHandlerAdapter {
 
 ## TODO
 
+* 支持注解方式
 * 支持代理池
 * 支持Berkeley 内存数据作为url管理器，提供海量url存储并提高存取效率
 * 支持热更新
