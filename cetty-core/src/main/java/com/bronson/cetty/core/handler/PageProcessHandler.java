@@ -9,7 +9,6 @@ public class PageProcessHandler extends ProcessHandlerAdapter {
 
     @Override
     public void process(HandlerContext ctx, Page page) {
-        System.out.println(page.getRawData());
+        super.process(ctx, page);
     }
-
 }
