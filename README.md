@@ -17,8 +17,11 @@
 * 支持多线程。
 * 基于Jsoup页面解析框架提供强大的网页解析处理能力。
 
-## 详细文档
-传送门[http://cetty.jibug.com/](http://cetty.jibug.com/)
+## 帮助
+1.详细文档：[http://cetty.jibug.com/](http://cetty.jibug.com/) <br>
+2.QQ群 <br>
+![](https://s1.ax1x.com/2018/11/20/F9GsFs.png)<br>
+3.bug反馈：[issues](https://github.com/heyingcai/cetty/issues)
 
 ## 让我们来写第一个demo
 
