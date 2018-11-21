@@ -17,6 +17,16 @@
 * 支持多线程。
 * 基于Jsoup页面解析框架提供强大的网页解析处理能力。
 
+## 快速开始
+### 使用Maven
+```xml
+<dependency>
+  <groupId>com.jibug.cetty</groupId>
+  <artifactId>cetty-core</artifactId>
+  <version>0.1.0</version>
+</dependency>
+```
+
 ## 帮助
 1.详细文档：[http://cetty.jibug.com/](http://cetty.jibug.com/) <br>
 2.QQ群 <br>
@@ -72,12 +82,19 @@ public class Tianya extends ProcessHandlerAdapter {
                 setPayload(Payload.custom()).        
                 //添加自定处理器
                 addHandler(new Tianya()).        
-                //添加默认结果处理器，输出致控制台
+                //添加默认结果处理器，输出至控制台
                 addHandler(new ConsoleReduceHandler()).        
                 start();
     }
 }
 ```
+
+## 历史版本
+
+| 版本      | 说明   |
+| :----:   | :----:   |
+| 0.1.0    | 支持基本爬虫功能| 
+
 
 ## TODO
 
@@ -85,4 +102,5 @@ public class Tianya extends ProcessHandlerAdapter {
 * 支持代理池
 * 支持Berkeley 内存数据作为url管理器，提供海量url存储并提高存取效率
 * 支持热更新
+* 支持爬虫治理
 
