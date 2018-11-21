@@ -3,6 +3,7 @@ package com.bronson.cetty.core;
 import com.bronson.cetty.core.handler.Handler;
 import com.bronson.cetty.core.handler.ProcessHandlerAdapter;
 import com.bronson.cetty.core.scheduler.Scheduler;
+import com.google.common.base.Preconditions;
 
 import java.util.List;
 
@@ -22,7 +23,12 @@ public class Bootstrap {
     }
 
     public Bootstrap addHandler(Handler handler) {
-        cetty.pipeline().addLast(handler);
+        cetty.pipeline().addLast(Preconditions.checkNotNull(handler,"handler can not be null"));
+        return this;
+    }
+
+    public Bootstrap addHandler(Handler handler,String name) {
+        cetty.pipeline().addLast(Preconditions.checkNotNull(handler,"handler can not be null"),name);
         return this;
     }
 
@@ -62,7 +68,7 @@ public class Bootstrap {
     }
 
     public Bootstrap setDownloader(ProcessHandlerAdapter handlerAdapter) {
-        cetty.pipeline().addLast(handlerAdapter);
+        cetty.pipeline().addLast(Preconditions.checkNotNull(handlerAdapter,"handler can not be null"));
         return this;
     }
 
