@@ -3,6 +3,7 @@
 一个轻量级的基于事件分发的爬虫框架。
 
 [![Build Status](https://www.travis-ci.org/heyingcai/cetty.svg?branch=master)](https://travis-ci.org/heyingcai/cetty)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/dempeZheng/forest/blob/master/LICENSE)
 [![](https://img.shields.io/badge/language-java-yellowgreen.svg)](https://img.shields.io/badge/language-java-yellowgreen.svg)
 
 
