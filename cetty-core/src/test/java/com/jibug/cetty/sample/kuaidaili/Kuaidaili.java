@@ -23,7 +23,11 @@ public class Kuaidaili extends ProcessHandlerAdapter {
     public void process(HandlerContext ctx, Page page) {
         Document document = page.getDocument();
 
+        //jsoup
         Elements elements = document.select("div#content>div.con-body>div>div#list>table>tbody>tr");
+
+        //xpath
+        List<Object> select = page.getHtml().select("//div[@id='content']/div[@class='con-body']/div/div[@id='list']/table/tbody/tr/td[@data-title='IP']/text()");
 
         List<Proxy> proxies = Lists.newArrayList();
         for (Element element : elements) {
@@ -33,6 +37,8 @@ public class Kuaidaili extends ProcessHandlerAdapter {
             Proxy proxy = new Proxy(ip, Integer.parseInt(port),scheme);
             proxies.add(proxy);
         }
+
+        System.out.println(select);
 
         page.getResult().addResults(proxies);
 

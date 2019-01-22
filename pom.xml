@@ -8,7 +8,7 @@
     <groupId>com.jibug.cetty</groupId>
     <artifactId>cetty-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 
     <description>cetty is an event dispatch crawler framework</description>
 
@@ -50,6 +50,7 @@
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-io.version>1.3.2</commons-io.version>
         <jsoup.version>1.10.3</jsoup.version>
+        <jsoupXpath.version>2.2.1</jsoupXpath.version>
         <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
     </properties>
 
@@ -127,6 +128,11 @@
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
                 <version>${jsoup.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.wanghaomiao</groupId>
+                <artifactId>JsoupXpath</artifactId>
+                <version>${jsoupXpath.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

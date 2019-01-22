@@ -3,6 +3,8 @@ package com.jibug.cetty.core;
 import com.google.common.collect.Lists;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.seimicrawler.xpath.JXDocument;
+import org.seimicrawler.xpath.JXNode;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,7 @@ public class Page {
 
     private Map<String,List<String>> headers;
 
-    private Document document;
+    private Html html;
 
     public String getUrl() {
         return url;
@@ -99,13 +101,46 @@ public class Page {
 
     public void setDocument(String text, String url) {
         try {
-            this.document = Jsoup.parse(text, url);
+            this.html = new Html(Jsoup.parse(text, url));
         } catch (Exception e) {
-            this.document = null;
+            this.html = new Html(null);
         }
     }
 
     public Document getDocument() {
-        return document;
+        return html.document;
     }
+
+    public Html getHtml() {
+        return html;
+    }
+
+    public class Html {
+
+        private JXDocument jxDocument;
+
+        private Document document;
+
+        Html(Document document) {
+            this.document = document;
+            this.jxDocument = JXDocument.create(document);
+        }
+
+        public List<Object> select(String xpath) {
+            return html.jxDocument.sel(xpath);
+        }
+
+        public Object selectOne(String xpath) {
+            return html.jxDocument.selOne(xpath);
+        }
+
+        public List<JXNode> selectNode(String xpath) {
+            return html.jxDocument.selN(xpath);
+        }
+
+        public JXNode selectOneNode(String xpath) {
+            return html.jxDocument.selNOne(xpath);
+        }
+    }
+
 }
