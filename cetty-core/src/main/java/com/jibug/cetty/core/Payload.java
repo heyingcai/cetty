@@ -149,7 +149,7 @@ public class Payload {
     public Payload addCookies(Map<String, Map<String, String>> cookieMap) {
         for (Map.Entry<String, Map<String, String>> cookie : cookieMap.entrySet()) {
             if (!cookies.containsKey(cookie.getKey())) {
-                cookies.putAll(cookies);
+                cookies.putAll(cookieMap);
             }
         }
         return this;
