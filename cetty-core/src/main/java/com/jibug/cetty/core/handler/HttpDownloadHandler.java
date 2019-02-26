@@ -165,9 +165,13 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
         }
         if (payload.getCookies() != null && !payload.getCookies().isEmpty()) {
             CookieStore cookieStore = new BasicCookieStore();
-            for (Map.Entry<String, String> cookieEntry : payload.getOriginCookies().entrySet()) {
-                BasicClientCookie cookie1 = new BasicClientCookie(cookieEntry.getKey(), cookieEntry.getValue());
-                cookieStore.addCookie(cookie1);
+            Map<String, Map<String, String>> cookies = payload.getCookies();
+            for (Map.Entry<String,Map<String, String>> cookieEntry : cookies.entrySet()) {
+                Map<String, String> value = cookieEntry.getValue();
+                for (Map.Entry<String, String> entry : value.entrySet()) {
+                    BasicClientCookie cookie1 = new BasicClientCookie(entry.getKey(), entry.getValue());
+                    cookieStore.addCookie(cookie1);
+                }
             }
             httpContext.setCookieStore(cookieStore);
         }
