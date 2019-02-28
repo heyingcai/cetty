@@ -94,7 +94,8 @@ public class Tianya extends ProcessHandlerAdapter {
 
 | 版本      | 说明   |
 | :----:   | :----:   |
-| 0.1.0    | 支持基本爬虫功能| 
+| 0.1.0    | 支持基本爬虫功能|
+| 0.1.5    | 1.支持xpath 2.修复添加cookie失效问题 3.优化底层逻辑 | 
 
 
 ## TODO
