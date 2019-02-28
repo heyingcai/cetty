@@ -77,6 +77,10 @@ public class Bootstrap {
         return this;
     }
 
+    public Cetty getCetty() {
+        return cetty;
+    }
+
     public void start() {
         cetty.startCrawler();
     }

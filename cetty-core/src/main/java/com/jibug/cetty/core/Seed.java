@@ -90,11 +90,31 @@ public class Seed implements Serializable {
         return this;
     }
 
+    public Seed putAttach(String key, Object value) {
+        if (attach == null) {
+            attach = Maps.newHashMap();
+        }
+        attach.put(key, value);
+        return this;
+    }
+
     public Object getAttch(String key) {
         if (attach == null) {
             return null;
         }
         return attach.get(key);
+    }
+
+    public Map<String, Object> getAttach() {
+        return attach;
+    }
+
+    public Map<String, String> getCookies() {
+        return cookies;
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.jibug.cetty.core.Payload;
 import com.jibug.cetty.core.Seed;
 import com.jibug.cetty.core.constans.HttpConstants;
 import com.jibug.cetty.core.net.Proxy;
+import com.jibug.cetty.core.utils.UrlUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
@@ -66,7 +67,7 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
 
         Page page;
         try {
-            httpResponse = httpClient.execute(convertHttpUriRequest(seed, payload), convertHttpClientContext(payload));
+            httpResponse = httpClient.execute(convertHttpUriRequest(seed, payload), convertHttpClientContext(seed, payload));
             page = handleResponse(seed, seed.getCharset() != null ? seed.getCharset() : payload.getCharset(), httpResponse);
             logger.info("download {} page success !", seed.getUrl());
             ctx.fireProcess(page);
@@ -85,7 +86,7 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
         CloseableHttpAsyncClient httpAsyncClient = ctx.cetty().getHttpAsyncClient();
 
         try {
-            httpAsyncClient.execute(convertHttpUriRequest(seed, payload), convertHttpClientContext(payload), new CallBack(seed, ctx, payload));
+            httpAsyncClient.execute(convertHttpUriRequest(seed, payload), convertHttpClientContext(seed, payload), new CallBack(seed, ctx, payload));
         } catch (Exception e) {
             logger.warn("download {} page error !", seed.getUrl(), e);
         }
@@ -155,7 +156,7 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
         return results;
     }
 
-    private HttpClientContext convertHttpClientContext(Payload payload) {
+    private HttpClientContext convertHttpClientContext(Seed seed, Payload payload) {
         Proxy proxy = payload.getProxy();
         HttpClientContext httpContext = new HttpClientContext();
         if (proxy != null && proxy.getUsername() != null) {
@@ -166,12 +167,25 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
         if (payload.getCookies() != null && !payload.getCookies().isEmpty()) {
             CookieStore cookieStore = new BasicCookieStore();
             Map<String, Map<String, String>> cookies = payload.getCookies();
-            for (Map.Entry<String,Map<String, String>> cookieEntry : cookies.entrySet()) {
+            for (Map.Entry<String, Map<String, String>> cookieEntry : cookies.entrySet()) {
                 Map<String, String> value = cookieEntry.getValue();
                 for (Map.Entry<String, String> entry : value.entrySet()) {
                     BasicClientCookie cookie1 = new BasicClientCookie(entry.getKey(), entry.getValue());
+                    cookie1.setDomain(cookieEntry.getKey());
                     cookieStore.addCookie(cookie1);
                 }
+            }
+            httpContext.setCookieStore(cookieStore);
+        }
+
+        if (!seed.getCookies().isEmpty()) {
+            CookieStore cookieStore = new BasicCookieStore();
+            Map<String, String> cookies = seed.getCookies();
+            for (Map.Entry<String, String> cookie : cookies.entrySet()) {
+                BasicClientCookie cookie1 = new BasicClientCookie(cookie.getKey(), cookie.getValue());
+                cookie1.setDomain(UrlUtils.getDomain(seed.getUrl())
+                );
+                cookieStore.addCookie(cookie1);
             }
             httpContext.setCookieStore(cookieStore);
         }
@@ -182,6 +196,12 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
         RequestBuilder requestBuilder = getRequestMethod(seed).setUri(seed.getUrl());
         if (payload.getHeaders() != null) {
             for (Map.Entry<String, String> headerEntry : payload.getHeaders().entrySet()) {
+                requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
+            }
+        }
+
+        if (!seed.getHeaders().isEmpty()) {
+            for (Map.Entry<String, String> headerEntry : seed.getHeaders().entrySet()) {
                 requestBuilder.addHeader(headerEntry.getKey(), headerEntry.getValue());
             }
         }
@@ -199,11 +219,6 @@ public class HttpDownloadHandler extends ProcessHandlerAdapter {
         }
         requestBuilder.setConfig(requestConfigBuilder.build());
         HttpUriRequest httpUriRequest = requestBuilder.build();
-        if (payload.getHeaders() != null && !payload.getHeaders().isEmpty()) {
-            for (Map.Entry<String, String> header : payload.getHeaders().entrySet()) {
-                httpUriRequest.addHeader(header.getKey(), header.getValue());
-            }
-        }
         return httpUriRequest;
     }
 
