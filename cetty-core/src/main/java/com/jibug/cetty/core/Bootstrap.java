@@ -86,6 +86,6 @@ public class Bootstrap {
     }
 
     public void stop() {
-        cetty.stopCrawler();
+        cetty.close();
     }
 }

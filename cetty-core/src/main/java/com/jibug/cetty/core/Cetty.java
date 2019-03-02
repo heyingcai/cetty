@@ -194,7 +194,7 @@ public class Cetty implements Runnable {
             final Seed seed = scheduler.poll();
 
             if (seed == null) {
-                if (stat.get() == STAT_STOPPED) {
+                if (threadPoolExecutor.getActiveCount() == 0 || stat.get() == STAT_STOPPED) {
                     break;
                 }
                 waitTask();
@@ -205,7 +205,7 @@ public class Cetty implements Runnable {
         if (!threadPoolExecutor.isShutdown()) {
             threadPoolExecutor.isShutdown();
             try {
-                threadPoolExecutor.awaitTermination(stopAwaitTime, TimeUnit.MINUTES);
+                threadPoolExecutor.awaitTermination(stopAwaitTime, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 logger.error("Cetty crawler wait failed !");
             }
@@ -238,7 +238,7 @@ public class Cetty implements Runnable {
             logger.info("Cetty crawler closed!");
         }
 
-        closeObject();
+        releaseObject();
 
         if (!Thread.currentThread().isInterrupted()) {
             Thread.currentThread().interrupt();
@@ -251,7 +251,7 @@ public class Cetty implements Runnable {
         thread.start();
     }
 
-    private void closeObject() {
+    private void releaseObject() {
         if (httpAsyncClient != null) {
             try {
                 httpAsyncClient.close();
@@ -268,12 +268,14 @@ public class Cetty implements Runnable {
         }
     }
 
+    public void close() {
+        releaseObject();
+        threadPoolExecutor.shutdown();
+    }
+
     private void waitTask() {
         newTask.lock();
         try {
-            if (threadPoolExecutor.getActiveCount() == 0 || stat.get() == STAT_STOPPED) {
-                return;
-            }
             newTaskCondition.await(newTaskWaitTime, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             logger.warn("waitNewTask interrupted, error {}", e);

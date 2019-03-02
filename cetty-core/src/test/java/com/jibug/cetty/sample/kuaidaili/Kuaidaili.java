@@ -45,13 +45,18 @@ public class Kuaidaili extends ProcessHandlerAdapter {
         ctx.fireReduce(page);
     }
 
-    public static void main(String[] args) {
-        Bootstrap.me().
+    public static void main(String[] args) throws InterruptedException {
+        Bootstrap async = Bootstrap.me().
                 startUrl("https://www.kuaidaili.com/free").
                 addHandler(new Kuaidaili()).setThreadNum(1).
                 addHandler(new ConsoleReduceHandler()).
                 setPayload(Payload.custom()).
-                isAsync(false).
-                start();
+                isAsync(false);
+
+        async.start();
+
+        Thread.sleep(15000);
+
+        async.stop();
     }
 }
