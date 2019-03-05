@@ -59,6 +59,8 @@ public class AsyncHttpClientGenerator extends AbstractHttpClientGenerator<Closea
 
         asyncClientBuilder.setRedirectStrategy(new CustomRedirectStrategy());
 
+        asyncClientBuilder.setConnectionManagerShared(true);
+
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(payload.getConnectTimeout())
                 .setSocketTimeout(payload.getSocketTimeout()).build();

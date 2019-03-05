@@ -40,6 +40,8 @@ public class SyncHttpClientGenerator extends AbstractHttpClientGenerator<Closeab
             httpClientBuilder.setUserAgent("");
         }
 
+        httpClientBuilder.setConnectionManagerShared(true);
+
         httpClientBuilder.setRedirectStrategy(new CustomRedirectStrategy());
 
         SocketConfig.Builder socketConfigBuilder = SocketConfig.custom();
