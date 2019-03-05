@@ -24,7 +24,7 @@
 <dependency>
   <groupId>com.jibug.cetty</groupId>
   <artifactId>cetty-core</artifactId>
-  <version>0.1.6</version>
+  <version>0.1.7</version>
 </dependency>
 ```
 
@@ -95,7 +95,8 @@ public class Tianya extends ProcessHandlerAdapter {
 | 版本      | 说明   |
 | :----:   | :----:   |
 | 0.1.0    | 支持基本爬虫功能|
-| 0.1.5    | 1.支持xpath 2.修复添加cookie失效问题 3.优化底层逻辑 | 
+| 0.1.5    | 1.支持xpath 2.修复添加cookie失效问题 3.优化底层逻辑 |
+| 0.1.7    | 修复底层bug | 
 
 
 ## TODO
