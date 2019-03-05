@@ -3,7 +3,7 @@ package com.jibug.cetty.core.handler;
 import com.jibug.cetty.core.Page;
 import com.jibug.cetty.core.Payload;
 import com.jibug.cetty.core.Seed;
-import com.jibug.cetty.core.constans.HttpConstants;
+import com.jibug.cetty.core.constants.HttpConstants;
 import com.jibug.cetty.core.net.Proxy;
 import com.jibug.cetty.core.utils.UrlUtils;
 import org.apache.commons.io.IOUtils;

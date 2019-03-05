@@ -98,7 +98,7 @@ public class Seed implements Serializable {
         return this;
     }
 
-    public Object getAttch(String key) {
+    public Object getAttach(String key) {
         if (attach == null) {
             return null;
         }

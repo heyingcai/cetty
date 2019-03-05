@@ -1,4 +1,4 @@
-package com.jibug.cetty.core.constans;
+package com.jibug.cetty.core.constants;
 
 /**
  * @author heyingcai

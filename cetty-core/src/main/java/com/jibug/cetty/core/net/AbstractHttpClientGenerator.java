@@ -1,7 +1,7 @@
 package com.jibug.cetty.core.net;
 
 import com.jibug.cetty.core.Payload;
-import com.jibug.cetty.core.constans.HttpConstants;
+import com.jibug.cetty.core.constants.HttpConstants;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolException;
