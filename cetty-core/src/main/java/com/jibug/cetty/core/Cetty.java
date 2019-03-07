@@ -10,6 +10,7 @@ import com.jibug.cetty.core.net.SyncHttpClientGenerator;
 import com.jibug.cetty.core.scheduler.QueueScheduler;
 import com.jibug.cetty.core.scheduler.Scheduler;
 import com.google.common.collect.Lists;
+import com.jibug.cetty.core.utils.UrlUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -40,6 +42,8 @@ public class Cetty implements Runnable {
     private final static int STAT_RUNNING = 1;
 
     private final static int STAT_STOPPED = 2;
+
+    private String name;
 
     private CountableThreadPool countableThreadPool;
 
@@ -151,6 +155,12 @@ public class Cetty implements Runnable {
         return this;
     }
 
+    public Cetty setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
+        checkRunningStat();
+        this.threadPoolExecutor = threadPoolExecutor;
+        return this;
+    }
+
     public Scheduler getScheduler() {
         return scheduler;
     }
@@ -188,11 +198,26 @@ public class Cetty implements Runnable {
         return this;
     }
 
+    public String getName() {
+        if (name != null) {
+            return name;
+        }
+        if (payload.getDomain() != null) {
+            return payload.getDomain();
+        }
+        if (startSeeds.size() > 0) {
+            Seed seed = startSeeds.get(0);
+            return UrlUtils.getDomain(seed.getUrl());
+        }
+        name = UUID.randomUUID().toString();
+        return name;
+    }
+
     @Override
     public void run() {
         checkRunningStat();
         initComponent();
-        logger.info("Crawler started!");
+        logger.info("Crawler {} started!", getName());
         while (!Thread.currentThread().isInterrupted() && stat.get() == STAT_RUNNING) {
             final Seed seed = scheduler.poll();
 
@@ -210,7 +235,7 @@ public class Cetty implements Runnable {
             try {
                 countableThreadPool.getThreadPoolExecutor().awaitTermination(stopAwaitTime, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
-                logger.error("Cetty crawler wait failed !");
+                logger.error("Cetty {} crawler wait failed !", getName());
             }
         }
         stopCrawler();
@@ -238,7 +263,7 @@ public class Cetty implements Runnable {
 
     public void stopCrawler() {
         if (stat.compareAndSet(STAT_RUNNING, STAT_STOPPED)) {
-            logger.info("Cetty crawler closed!");
+            logger.info("Cetty {} crawler closed!", getName());
         }
 
         releaseObject();
@@ -324,7 +349,7 @@ public class Cetty implements Runnable {
         if (threadPoolAvailable) {
             if (threadPoolExecutor != null && !threadPoolExecutor.isShutdown()) {
                 countableThreadPool = new CountableThreadPool(threadNum, threadPoolExecutor);
-            }else {
+            } else {
                 countableThreadPool = new CountableThreadPool(threadNum);
             }
         }

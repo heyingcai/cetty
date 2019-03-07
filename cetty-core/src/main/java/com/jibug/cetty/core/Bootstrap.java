@@ -6,6 +6,7 @@ import com.jibug.cetty.core.scheduler.Scheduler;
 import com.google.common.base.Preconditions;
 
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author heyingcai
@@ -64,6 +65,11 @@ public class Bootstrap {
 
     public Bootstrap setScheduler(Scheduler scheduler) {
         cetty.setScheduler(scheduler);
+        return this;
+    }
+
+    public Bootstrap setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
+        cetty.setThreadPoolExecutor(threadPoolExecutor);
         return this;
     }
 
