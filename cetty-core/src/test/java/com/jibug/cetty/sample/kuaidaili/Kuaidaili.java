@@ -51,12 +51,12 @@ public class Kuaidaili extends ProcessHandlerAdapter {
                 addHandler(new Kuaidaili()).setThreadNum(1).
                 addHandler(new ConsoleReduceHandler()).
                 setPayload(Payload.custom()).
-                isAsync(false);
+                isAsync(false).isDuration(true);
 
         async.start();
 
         Thread.sleep(15000);
 
-        async.stop();
+//        async.stop();
     }
 }

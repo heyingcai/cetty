@@ -62,6 +62,13 @@ public class Cetty implements Runnable {
     private List<Seed> startSeeds;
 
     /**
+     * crawler duration grab
+     * default value is not duration
+     * when there is no task, the crawler stops after a period of time.
+     */
+    private boolean duration = false;
+
+    /**
      * crawler is support async
      * default value is sync
      */
@@ -177,6 +184,10 @@ public class Cetty implements Runnable {
         this.async = async;
     }
 
+    public void setDuration(boolean duration) {
+        this.duration = duration;
+    }
+
     public HttpClientGenerator<CloseableHttpAsyncClient> getAsyncHttpClientGenerator() {
         return asyncHttpClientGenerator;
     }
@@ -222,8 +233,10 @@ public class Cetty implements Runnable {
             final Seed seed = scheduler.poll();
 
             if (seed == null) {
-                if (countableThreadPool.getThreadAliveCount() == 0 || stat.get() == STAT_STOPPED) {
-                    break;
+                if (!duration) {
+                    if (countableThreadPool.getThreadAliveCount() == 0 || stat.get() == STAT_STOPPED) {
+                        break;
+                    }
                 }
                 waitTask();
             } else {

@@ -24,12 +24,12 @@ public class Bootstrap {
     }
 
     public Bootstrap addHandler(Handler handler) {
-        cetty.pipeline().addLast(Preconditions.checkNotNull(handler,"handler can not be null"));
+        cetty.pipeline().addLast(Preconditions.checkNotNull(handler, "handler can not be null"));
         return this;
     }
 
-    public Bootstrap addHandler(Handler handler,String name) {
-        cetty.pipeline().addLast(Preconditions.checkNotNull(handler,"handler can not be null"),name);
+    public Bootstrap addHandler(Handler handler, String name) {
+        cetty.pipeline().addLast(Preconditions.checkNotNull(handler, "handler can not be null"), name);
         return this;
     }
 
@@ -40,6 +40,11 @@ public class Bootstrap {
 
     public Bootstrap isAsync(boolean async) {
         cetty.setAsync(async);
+        return this;
+    }
+
+    public Bootstrap isDuration(boolean duration) {
+        cetty.setDuration(duration);
         return this;
     }
 
@@ -74,7 +79,7 @@ public class Bootstrap {
     }
 
     public Bootstrap setDownloader(ProcessHandlerAdapter handlerAdapter) {
-        cetty.pipeline().addLast(Preconditions.checkNotNull(handlerAdapter,"handler can not be null"));
+        cetty.pipeline().addLast(Preconditions.checkNotNull(handlerAdapter, "handler can not be null"));
         return this;
     }
 
