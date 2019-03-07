@@ -24,7 +24,7 @@
 <dependency>
   <groupId>com.jibug.cetty</groupId>
   <artifactId>cetty-core</artifactId>
-  <version>0.1.7</version>
+  <version>0.1.8</version>
 </dependency>
 ```
 

@@ -1,5 +1,6 @@
 package com.jibug.cetty.core;
 
+import com.jibug.cetty.core.concurrent.CountableThreadPool;
 import com.jibug.cetty.core.concurrent.NamedThreadFactory;
 import com.jibug.cetty.core.handler.HandlerPipeline;
 import com.jibug.cetty.core.handler.HttpDownloadHandler;
@@ -40,6 +41,8 @@ public class Cetty implements Runnable {
 
     private final static int STAT_STOPPED = 2;
 
+    private CountableThreadPool countableThreadPool;
+
     private ThreadPoolExecutor threadPoolExecutor;
 
     private int threadNum = 1;
@@ -48,7 +51,7 @@ public class Cetty implements Runnable {
 
     private Condition newTaskCondition = newTask.newCondition();
 
-    private long stopAwaitTime = 10;
+    private long stopAwaitTime = 20;
 
     private long newTaskWaitTime = 30000;
 
@@ -194,18 +197,18 @@ public class Cetty implements Runnable {
             final Seed seed = scheduler.poll();
 
             if (seed == null) {
-                if (threadPoolExecutor.getActiveCount() == 0 || stat.get() == STAT_STOPPED) {
+                if (countableThreadPool.getThreadAliveCount() == 0 || stat.get() == STAT_STOPPED) {
                     break;
                 }
                 waitTask();
             } else {
-                threadPoolExecutor.execute(new SeedTask(seed));
+                countableThreadPool.execute(new SeedTask(seed));
             }
         }
-        if (!threadPoolExecutor.isShutdown()) {
-            threadPoolExecutor.isShutdown();
+        if (!countableThreadPool.isShutdown()) {
+            countableThreadPool.isShutdown();
             try {
-                threadPoolExecutor.awaitTermination(stopAwaitTime, TimeUnit.SECONDS);
+                countableThreadPool.getThreadPoolExecutor().awaitTermination(stopAwaitTime, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 logger.error("Cetty crawler wait failed !");
             }
@@ -270,7 +273,7 @@ public class Cetty implements Runnable {
 
     public void close() {
         releaseObject();
-        threadPoolExecutor.shutdown();
+        countableThreadPool.shutdown();
     }
 
     private void waitTask() {
@@ -317,10 +320,13 @@ public class Cetty implements Runnable {
             httpClient = httpClientHttpClientGenerator.getClient(getPayload());
         }
 
-        boolean threadPoolAvailable = threadNum > 0 && threadPoolExecutor == null || threadPoolExecutor.isShutdown();
+        boolean threadPoolAvailable = threadNum > 0 && countableThreadPool == null || countableThreadPool.isShutdown();
         if (threadPoolAvailable) {
-            threadPoolExecutor = new ThreadPoolExecutor(threadNum, threadNum, 0L, TimeUnit.MILLISECONDS,
-                    new LinkedBlockingQueue<>(), new NamedThreadFactory("Cetty-crawler", false));
+            if (threadPoolExecutor != null && !threadPoolExecutor.isShutdown()) {
+                countableThreadPool = new CountableThreadPool(threadNum, threadPoolExecutor);
+            }else {
+                countableThreadPool = new CountableThreadPool(threadNum);
+            }
         }
 
         if (startSeeds != null) {
