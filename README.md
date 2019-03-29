@@ -72,20 +72,22 @@ public class Tianya extends ProcessHandlerAdapter {
     public static void main(String[] args) {
         //启动引导类
         Bootstrap.
-                me().
+                me()
                 //使用同步抓取
-                isAsync(false).
+                .isAsync(false)
                 //开启一个线程
-                setThreadNum(1).
+                .setThreadNum(1)
                 //抓取入口url
-                startUrl("http://bbs.tianya.cn/list-333-1.shtml").       
+                .startUrl("http://bbs.tianya.cn/list-333-1.shtml")       
                 //通用请求信息
-                setPayload(Payload.custom()).        
+                .setPayload(Payload.custom())       
                 //添加自定处理器
-                addHandler(new Tianya()).        
+                .addHandler(new Tianya())        
                 //添加默认结果处理器，输出至控制台
-                addHandler(new ConsoleReduceHandler()).        
-                start();
+                .addHandler(new ConsoleReduceHandler())
+                //是否启用实时抓取模式，如果启用非实时抓取模式则当任务队列中没有任务的一段时间后爬虫会自动处于close状态
+                .isDuration(false)
+                .start();
     }
 }
 ```
