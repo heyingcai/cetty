@@ -1,0 +1,29 @@
+[
+  {
+    "url": "http://www.guxiaobei.com/search/shopify/page/1",
+    "pageLimit": 2,
+    "threadNum": 1,
+    "pageHandler": "guxiaobeiPageHandler",
+    "pageReducer": "articleReducer",
+    "via": "顾小北",
+    "status": 1
+  },
+  {
+    "url": "https://www.cifnews.com/Search/1?keyword=shopify",
+    "pageLimit": 16,
+    "threadNum": 1,
+    "pageHandler": "cifnewsPageHandler",
+    "pageReducer": "articleReducer",
+    "via": "雨果网",
+    "status": 0
+  },
+  {
+    "url": "https://www.waimaob2c.com/page/1",
+    "pageLimit": 10,
+    "threadNum": 1,
+    "pageHandler": "waimaob2cPageHandler",
+    "pageReducer": "articleReducer",
+    "via": "waimaob2c",
+    "status": 0
+  }
+]
