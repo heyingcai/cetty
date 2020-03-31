@@ -11,7 +11,7 @@
     <groupId>com.jibug.cetty</groupId>
     <artifactId>sample</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>sample</name>
+    <name>cetty-sample</name>
     <description>sample for cetty</description>
 
     <properties>

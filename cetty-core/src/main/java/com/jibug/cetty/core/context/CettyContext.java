@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public final class CettyContext {
 
-    private static final Map<String, Bootstrap> contextMap = Maps.newHashMap();
+    private static Map<String, Bootstrap> contextMap = Maps.newConcurrentMap();
 
     public static Map<String, Bootstrap> getContextMap() {
         return contextMap;
@@ -18,7 +18,7 @@ public final class CettyContext {
 
     public static void addContext(String key, Bootstrap bootstrap) {
         if (contextMap.get(key) == null) {
-            contextMap.put(key,bootstrap);
+            contextMap.put(key, bootstrap);
         }
     }
 
