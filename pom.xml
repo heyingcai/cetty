@@ -34,7 +34,7 @@
     </scm>
     <modules>
         <module>cetty-core</module>
-        <module>samples</module>
+        <module>cetty-samples</module>
     </modules>
 
     <properties>
